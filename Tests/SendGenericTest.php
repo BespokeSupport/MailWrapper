@@ -135,4 +135,12 @@ class SendGenericTest extends \PHPUnit_Framework_TestCase
 
         MailManager::sendVia($message, null);
     }
+
+    /**
+     * @expectedException \BespokeSupport\MailWrapper\MailWrapperSetupException
+     */
+    public function testSendExceptionMessage()
+    {
+        MailManager::send(null);
+    }
 }

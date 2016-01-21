@@ -32,7 +32,7 @@ class MessageTransformer
         // emails
         $from = $message->getFrom();
         $batch->setFromAddress(key($from));
-        $batch->setReplyToAddress(key($message->getReplyTo()));
+        $batch->setReplyToAddress($message->getReplyTo());
 
         $toMails = $message->getTo();
         foreach (array_keys($toMails) as $email) {
