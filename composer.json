@@ -1,0 +1,31 @@
+{
+  "name": "bespoke-support/mail-wrapper",
+  "description": "Multi platform mail wrapper",
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "authors": [
+    {
+      "name": "Richard Seymour",
+      "email": "web@rickseymour.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "BespokeSupport\\MailWrapper\\Tests\\": "Tests",
+      "BespokeSupport\\MailWrapper\\": "lib"
+    }
+  },
+  "require" : {
+    "php" : ">5.3"
+  },
+  "require-dev": {
+    "swiftmailer/swiftmailer": "~4|~5",
+    "mailgun/mailgun-php": "1.7.*",
+    "phpmailer/phpmailer": "~5"
+  },
+  "suggest": {
+    "swiftmailer/swiftmailer": "~4|~5",
+    "mailgun/mailgun-php": "1.7.*",
+    "phpmailer/phpmailer": "~5.2"
+  }
+}
