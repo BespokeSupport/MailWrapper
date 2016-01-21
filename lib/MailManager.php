@@ -113,13 +113,27 @@ class MailManager
             throw new MailWrapperSetupException('No TO emails provided');
         }
 
+        $exceptionClass = get_class($exception);
+
         $content = '';
 
-        $content .= $exception->getMessage();
+        $content .= "Except:\t".$exceptionClass . PHP_EOL;
+        $content .= "Error:\t".$exception->getMessage() . PHP_EOL;
+        $content .= "File:\t".$exception->getFile() . PHP_EOL;
+        $content .= "Line:\t".$exception->getLine() . PHP_EOL;
+
+        if ($exception instanceof  MailWrapperMailableException) {
+            $content .= PHP_EOL . 'Params:' . PHP_EOL;
+            $content .= print_r($exception->getParams(), true);
+        }
+
+        $content .= PHP_EOL . PHP_EOL;
+        $content .= 'Trace:' . PHP_EOL . PHP_EOL;
+        $content .= $exception->getTraceAsString();
 
         $message = static::getMailMessage($fromEmail, $subject, $content, $toEmails);
 
-        return static::send($transport, $message);
+        return static::sendVia($transport, $message);
     }
 
     /**
@@ -139,7 +153,7 @@ class MailManager
 
         $message = static::getMailMessage($fromEmail, $subject, $content, $toEmails);
 
-        return static::send($transport, $message);
+        return static::sendVia($transport, $message);
     }
 
     /**

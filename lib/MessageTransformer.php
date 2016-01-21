@@ -27,30 +27,32 @@ class MessageTransformer
     {
         $batch = $transport->batch();
         $batch->setSubject($message->getSubject());
-        $batch->setHtmlBody($message->getBody());
+        $batch->setHtmlBody(nl2br($message->getBody()));
 
         // emails
         $from = $message->getFrom();
         $batch->setFromAddress(key($from));
-        $batch->setReplyToAddress($message->getReplyTo());
+        $batch->setReplyToAddress(key($message->getReplyTo()));
 
-        foreach ($message->getTo() as $email) {
+        $toMails = $message->getTo();
+        foreach (array_keys($toMails) as $email) {
             if ($batch->getRecipientCount('to') >= MailgunMessage::RECIPIENT_COUNT_LIMIT) {
                 throw new MailWrapperSetupException(
                     'Recipient cannot exceed: ' . MailgunMessage::RECIPIENT_COUNT_LIMIT
                 );
             }
+
             $batch->addToRecipient($email, []);
         }
 
         if ($message->getCc()) {
-            foreach ($message->getCc() as $email) {
+            foreach (array_keys($message->getCc()) as $email) {
                 $batch->addCcRecipient($email, []);
             }
         }
 
         if ($message->getBcc()) {
-            foreach ($message->getBcc() as $email) {
+            foreach (array_keys($message->getBcc()) as $email) {
                 $batch->addBccRecipient($email, []);
             }
         }
