@@ -9,16 +9,16 @@
  * @link     https://github.com/BespokeSupport/MailWrapper
  */
 
-namespace BespokeSupport\MailWrapper\Tests;
+namespace BespokeSupport\MailWrapper\TesterMessage;
 
 use BespokeSupport\MailWrapper\MailgunMessage;
 use Mailgun\Connection\Exceptions\InvalidCredentials;
 
 /**
- * Class TestMailgunExceptionBatch
- * @package BespokeSupport\MailWrapper\Tests
+ * Class TesterMessageMailgunException
+ * @package BespokeSupport\MailWrapper\TesterMessage
  */
-class TestMailgunExceptionBatch extends MailgunMessage
+class TesterMessageMailgunException extends MailgunMessage
 {
     /**
      * @throws InvalidCredentials

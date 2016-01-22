@@ -91,9 +91,6 @@ class MailAddressManager
         }
 
         if (is_object($email)) {
-            /**
-             * @var $email object
-             */
             if (method_exists($email, 'getEmail')) {
                 $emailString = $email->getEmail();
                 if ($emailString) {

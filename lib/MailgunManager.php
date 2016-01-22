@@ -25,7 +25,7 @@ class MailgunManager extends Mailgun
     protected $domain;
 
     /**
-     * MailGunManager constructor.
+     * MailgunManager constructor.
      * @param string $apiKey
      * @param string $domain
      * @throws MailWrapperSetupException
@@ -46,5 +46,15 @@ class MailgunManager extends Mailgun
     public function batch()
     {
         return new MailgunMessage($this->restClient, $this->domain, false);
+    }
+
+    /**
+     * @param $apiKey
+     * @param $domain
+     * @return MailgunManager
+     */
+    public static function newInstance($apiKey, $domain)
+    {
+        return new self($apiKey, $domain);
     }
 }

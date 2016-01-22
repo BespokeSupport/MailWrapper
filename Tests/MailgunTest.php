@@ -13,13 +13,25 @@ namespace BespokeSupport\MailWrapper\Tests;
 
 use BespokeSupport\MailWrapper\MailgunManager;
 use BespokeSupport\MailWrapper\MailManager;
+use BespokeSupport\MailWrapper\TesterTransport\TesterTransportMailgunException;
+use BespokeSupport\MailWrapper\TesterTransport\TesterTransportMailgunNull;
 
 /**
  * Class MailgunTest
  * @package BespokeSupport\MailWrapper\Tests
  */
-class MailgunTest extends \PHPUnit_Framework_TestCase
+class MailgunTest extends MailWrapperTestBootstrap
 {
+    /**
+     *
+     */
+    public function setUp()
+    {
+        if (!class_exists('Mailgun\Mailgun')) {
+            $this->markTestSkipped('Mailgun\Mailgun not installed');
+        }
+    }
+
     /**
      * @expectedException \BespokeSupport\MailWrapper\MailWrapperSetupException
      */
@@ -30,6 +42,9 @@ class MailgunTest extends \PHPUnit_Framework_TestCase
         (new MailgunManager($apiKey, $domain));
     }
 
+    /**
+     *
+     */
     public function testValid()
     {
         $apiKey = 'key';
@@ -38,6 +53,9 @@ class MailgunTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\BespokeSupport\MailWrapper\MailgunManager', $manager);
     }
 
+    /**
+     *
+     */
     public function testBatch()
     {
         $apiKey = 'key';
@@ -86,11 +104,14 @@ class MailgunTest extends \PHPUnit_Framework_TestCase
         MailManager::sendViaMailgun($manager, null);
     }
 
+    /**
+     *
+     */
     public function testCcBcc()
     {
         $apiKey = 'key';
         $domain = 'example.com';
-        $manager = new TestMailgunNullManager($apiKey, $domain);
+        $manager = new TesterTransportMailgunNull($apiKey, $domain);
 
         $message = MailManager::getMailMessage(
             'hello@example.com',
@@ -104,11 +125,14 @@ class MailgunTest extends \PHPUnit_Framework_TestCase
         MailManager::sendVia($manager, $message);
     }
 
+    /**
+     *
+     */
     public function testSend()
     {
         $apiKey = 'key';
         $domain = 'example.com';
-        $manager = new TestMailgunNullManager($apiKey, $domain);
+        $manager = new TesterTransportMailgunNull($apiKey, $domain);
 
         $message = MailManager::getMailMessage(
             'hello@example.com',
@@ -127,7 +151,7 @@ class MailgunTest extends \PHPUnit_Framework_TestCase
     {
         $apiKey = 'key';
         $domain = 'example.com';
-        $manager = new TestMailgunExceptionManager($apiKey, $domain);
+        $manager = new TesterTransportMailgunException($apiKey, $domain);
 
         $message = MailManager::getMailMessage(
             'hello@example.com',

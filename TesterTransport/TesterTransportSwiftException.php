@@ -9,14 +9,15 @@
  * @link     https://github.com/BespokeSupport/MailWrapper
  */
 
-namespace BespokeSupport\MailWrapper\Tests;
+namespace BespokeSupport\MailWrapper\TesterTransport;
 
 use Swift_Mime_Message;
 
 /**
- * Class TestSwiftExceptionTransport
+ * Class TesterTransportSwiftException
+ * @package BespokeSupport\MailWrapper\TesterTransport
  */
-class TestSwiftExceptionTransport implements \Swift_Transport
+class TesterTransportSwiftException implements \Swift_Transport
 {
     /**
      * Tests if this Transport mechanism has started.
@@ -29,17 +30,12 @@ class TestSwiftExceptionTransport implements \Swift_Transport
     }
 
     /**
-     * Starts this Transport mechanism.
+     * @param \Swift_Events_EventListener $listener
      */
-    public function start()
+    public function registerPlugin(\Swift_Events_EventListener $listener)
     {
-    }
-
-    /**
-     * Stops this Transport mechanism.
-     */
-    public function stop()
-    {
+        if ($listener) {
+        }
     }
 
     /**
@@ -58,11 +54,16 @@ class TestSwiftExceptionTransport implements \Swift_Transport
     }
 
     /**
-     * @param \Swift_Events_EventListener $listener
+     * Starts this Transport mechanism.
      */
-    public function registerPlugin(\Swift_Events_EventListener $listener)
+    public function start()
     {
-        if ($listener) {
-        }
+    }
+
+    /**
+     * Stops this Transport mechanism.
+     */
+    public function stop()
+    {
     }
 }

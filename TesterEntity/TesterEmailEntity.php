@@ -9,23 +9,22 @@
  * @link     https://github.com/BespokeSupport/MailWrapper
  */
 
-namespace BespokeSupport\MailWrapper\Tests;
+namespace BespokeSupport\MailWrapper\TesterEntity;
 
 /**
- * Class TestEntity
- * @package BespokeSupport\MailWrapper\Tests
+ * Class TesterEmailEntity
+ * @package BespokeSupport\MailWrapper\TesterEntity
  */
-class TestEntity
+class TesterEmailEntity
 {
     /**
      * @var string
      */
-    protected $email;
-
+    public $myEmail;
     /**
      * @var string
      */
-    public $myEmail;
+    protected $email;
 
     /**
      * @return string
@@ -34,7 +33,6 @@ class TestEntity
     {
         return $this->myEmail;
     }
-
 
     /**
      * @return string

@@ -9,13 +9,13 @@
  * @link     https://github.com/BespokeSupport/MailWrapper
  */
 
-namespace BespokeSupport\MailWrapper\Tests;
+namespace BespokeSupport\MailWrapper\TesterEntity;
 
 /**
- * Class TestEntityString
- * @package BespokeSupport\MailWrapper\Tests
+ * Class TesterEmailEntityString
+ * @package BespokeSupport\MailWrapper\TesterEntity
  */
-class TestEntityString
+class TesterEmailEntityString
 {
     /**
      * @var string

@@ -10,6 +10,7 @@
  */
 
 namespace BespokeSupport\MailWrapper\Tests;
+
 use BespokeSupport\MailWrapper\MailManager;
 use BespokeSupport\MailWrapper\MailWrapperMailableException;
 
@@ -17,17 +18,26 @@ use BespokeSupport\MailWrapper\MailWrapperMailableException;
  * Class ExceptionTest
  * @package BespokeSupport\MailWrapper\Tests
  */
-class ExceptionTest extends \PHPUnit_Framework_TestCase
+class ExceptionTest extends MailWrapperTestBootstrap
 {
+    /**
+     *
+     */
     public function testMailable()
     {
         try {
-            throw (new MailWrapperMailableException)->setParams(['test1' => 'test2']);
+            throw (new MailWrapperMailableException)->setParams([
+                'test1' => 'test2',
+                'test3' => 'test4',
+            ]);
         } catch (MailWrapperMailableException $e) {
-            $this->assertCount(1, $e->getParams());
+            $this->assertCount(2, $e->getParams());
         }
     }
 
+    /**
+     *
+     */
     public function testMailableNull()
     {
         try {
@@ -37,10 +47,18 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     *
+     */
     public function testSendMailableException()
     {
-        $e = (new MailWrapperMailableException)->setParams(['test1' => 'test2']);
+        if (!class_exists('Swift_NullTransport')) {
+            return;
+        }
+
         $transport = new \Swift_NullTransport();
+
+        $e = (new MailWrapperMailableException)->setParams(['test1' => 'test2']);
         MailManager::sendExceptionTo(
             $transport,
             'hello@example.com',
@@ -49,6 +67,4 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
             'hello@example.com'
         );
     }
-
-
 }

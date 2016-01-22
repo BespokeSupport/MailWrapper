@@ -9,15 +9,15 @@
  * @link     https://github.com/BespokeSupport/MailWrapper
  */
 
-namespace BespokeSupport\MailWrapper\Tests;
+namespace BespokeSupport\MailWrapper\TesterMessage;
 
 use BespokeSupport\MailWrapper\MailgunMessage;
 
 /**
- * Class TestMailgunNullBatch
- * @package BespokeSupport\MailWrapper\Tests
+ * Class TesterMessageMailgunNull
+ * @package BespokeSupport\MailWrapper\TesterMessage
  */
-class TestMailgunNullBatch extends MailgunMessage
+class TesterMessageMailgunNull extends MailgunMessage
 {
     /**
      * @return bool

@@ -12,20 +12,22 @@
 namespace BespokeSupport\MailWrapper\Tests;
 
 use BespokeSupport\MailWrapper\MailManager;
+use BespokeSupport\MailWrapper\TesterTransport\TesterTransportSwiftException;
 
 /**
  * Class SwiftMailTest
  * @package BespokeSupport\MailWrapper\Tests
  */
-class SwiftMailTest extends \PHPUnit_Framework_TestCase
+class SwiftMailTest extends MailWrapperTestBootstrap
 {
     /**
-     * @expectedException \BespokeSupport\MailWrapper\MailWrapperSetupException
+     *
      */
-    public function testExceptionTransport()
+    public function setUp()
     {
-        $transport = null;
-        MailManager::sendViaSwiftMailer($transport);
+        if (!class_exists('Swift_Message')) {
+            $this->markTestSkipped('Swift_Mailer / Swift_Message not installed');
+        }
     }
 
     /**
@@ -38,6 +40,18 @@ class SwiftMailTest extends \PHPUnit_Framework_TestCase
         MailManager::sendViaSwiftMailer($transport, $message);
     }
 
+    /**
+     * @expectedException \BespokeSupport\MailWrapper\MailWrapperSetupException
+     */
+    public function testExceptionTransport()
+    {
+        $transport = null;
+        MailManager::sendViaSwiftMailer($transport);
+    }
+
+    /**
+     *
+     */
     public function testSend()
     {
         $transport = new \Swift_NullTransport();
@@ -50,19 +64,42 @@ class SwiftMailTest extends \PHPUnit_Framework_TestCase
         MailManager::sendViaSwiftMailer($transport, $message);
     }
 
-    public function testSendViaException()
+    /**
+     *
+     */
+    public function testSendMultiple()
     {
-        $transport = new \Swift_NullTransport();
+        $transport1 = new \Swift_NullTransport();
+        $transport2 = new \Swift_NullTransport();
         $message = MailManager::getMailMessage(
             'hello@example.com',
             'hello@example.com',
             'hello@example.com',
             'hello@example.com'
         );
-        MailManager::sendVia($transport, $message);
+
+        MailManager::send($message, $transport1, $transport2);
     }
 
+    /**
+     * @expectedException \BespokeSupport\MailWrapper\MailWrapperSendException
+     */
+    public function testSendSingleFail()
+    {
+        $transport1 = new TesterTransportSwiftException();
+        $message = MailManager::getMailMessage(
+            'hello@example.com',
+            'hello@example.com',
+            'hello@example.com',
+            'hello@example.com'
+        );
 
+        MailManager::send($message, $transport1);
+    }
+
+    /**
+     *
+     */
     public function testSendVia()
     {
         $transport = new \Swift_NullTransport();
@@ -75,6 +112,24 @@ class SwiftMailTest extends \PHPUnit_Framework_TestCase
         MailManager::sendVia($transport, $message);
     }
 
+    /**
+     *
+     */
+    public function testSendViaException()
+    {
+        $transport = new \Swift_NullTransport();
+        $message = MailManager::getMailMessage(
+            'hello@example.com',
+            'hello@example.com',
+            'hello@example.com',
+            'hello@example.com'
+        );
+        MailManager::sendVia($transport, $message);
+    }
+
+    /**
+     *
+     */
     public function testSendViaWrapped()
     {
         $transport = new \Swift_NullTransport();

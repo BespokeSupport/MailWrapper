@@ -17,87 +17,100 @@ use BespokeSupport\MailWrapper\MailAddressManager;
  * Class MailParseArraysTest
  * @package BespokeSupport\MailWrapper\Tests
  */
-class MailParseArraysTest extends \PHPUnit_Framework_TestCase
+class MailParseArraysTest extends MailWrapperTestBootstrap
 {
+    /**
+     *
+     */
     public function testOneArray()
     {
-        $email = ['hello@example.com'];
-        $this->assertCount(1, MailAddressManager::combineRecipients($email));
+        $email = [self::$from];
+
+        $response = MailAddressManager::combineRecipients($email);
+        $this->assertCount(1, $response);
+        $this->assertEquals(self::$from, $response[0]);
     }
 
+    /**
+     *
+     */
     public function testTwoArray()
     {
-        $email = [
-            'hello1@example.com',
-            'hello2@example.com',
-        ];
-        $this->assertCount(2, MailAddressManager::combineRecipients($email));
+        $email = self::$to;
+
+        $response = MailAddressManager::combineRecipients($email);
+
+        $this->assertCount(2, $response);
+        $this->assertEquals(self::$to[0], $response[0]);
     }
 
-    public function testTwoIdenticalArray()
-    {
-        $email = [
-            'hello1@example.com',
-            'hello1@example.com',
-        ];
-        $this->assertCount(1, MailAddressManager::combineRecipients($email));
-    }
-
+    /**
+     *
+     */
     public function testTwoArraysArray()
     {
-        $email1 = [
-            'hello1@example.com',
-            'hello2@example.com',
-        ];
-        $email2 = [
-            'hello3@example.com',
-            'hello4@example.com',
-        ];
-        $this->assertCount(4, MailAddressManager::combineRecipients($email1, $email2));
+        $response = MailAddressManager::combineRecipients(self::$to, self::$cc);
+
+        $this->assertCount(4, $response);
+        $this->assertEquals(self::$to[0], $response[0]);
+        $this->assertEquals(self::$to[1], $response[1]);
+        $this->assertEquals(self::$cc[0], $response[2]);
+        $this->assertEquals(self::$cc[1], $response[3]);
     }
 
+    /**
+     *
+     */
     public function testTwoArraysOneArray()
     {
-        $email1 = [
-            'hello1@example.com',
-            'hello1@example.com',
-        ];
-        $email2 = [
-            'hello1@example.com',
-            'hello1@example.com',
-        ];
-        $this->assertCount(1, MailAddressManager::combineRecipients($email1, $email2));
+        $response = MailAddressManager::combineRecipients([self::$to[0]], [self::$to[0]]);
+
+        $this->assertCount(1, $response);
+        $this->assertEquals(self::$to[0], $response[0]);
     }
 
+    /**
+     *
+     */
     public function testTwoArraysTwoArray()
     {
-        $email1 = [
-            'hello1@example.com',
-            'hello2@example.com',
-        ];
-        $email2 = [
-            'hello1@example.com',
-            'hello2@example.com',
-        ];
-        $this->assertCount(2, MailAddressManager::combineRecipients($email1, $email2));
+        $response = MailAddressManager::combineRecipients(self::$to, self::$to);
+
+        $this->assertCount(2, $response);
+        $this->assertEquals(self::$to[0], $response[0]);
+        $this->assertEquals(self::$to[1], $response[1]);
     }
 
+    /**
+     *
+     */
+    public function testTwoIdenticalArray()
+    {
+        $email = self::getDuplicatedAddress('to');
+
+        $response = MailAddressManager::combineRecipients($email);
+
+        $this->assertCount(2, $response);
+        $this->assertEquals(self::$to[0], $response[0]);
+        $this->assertEquals(self::$to[1], $response[1]);
+    }
+
+    /**
+     *
+     */
     public function testTwoMultiLevelArraysTwoArray()
     {
         $email1 = [
-            [
-                'hello1@example.com',
-                'hello2@example.com',
-            ],
-            'hello3@example.com',
+            self::$to,
+            self::$from,
         ];
         $email2 = [
-            'hello4@example.com',
-            [
-                'hello5@example.com',
-                'hello6@example.com',
-            ]
+            self::$bcc,
+            self::$cc,
         ];
-        $this->assertCount(6, MailAddressManager::combineRecipients($email1, $email2));
+
+        $response = MailAddressManager::combineRecipients($email1, $email2);
+
+        $this->assertCount(7, $response);
     }
 }

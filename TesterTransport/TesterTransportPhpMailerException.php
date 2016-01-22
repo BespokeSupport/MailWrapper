@@ -9,25 +9,26 @@
  * @link     https://github.com/BespokeSupport/MailWrapper
  */
 
-namespace BespokeSupport\MailWrapper\Tests;
+namespace BespokeSupport\MailWrapper\TesterTransport;
 
 /**
- * Class EntityPhpMailerException
- * @package BespokeSupport\MailWrapper\Tests
+ * Class TesterTransportPhpMailerException
+ * @package BespokeSupport\MailWrapper\TesterTransport
  */
-class EntityPhpMailerException extends \PHPMailer
+class TesterTransportPhpMailerException extends \PHPMailer
 {
     /**
      * @throws \phpmailerException
      */
-    public function send()
+    public function postSend()
     {
         throw new \phpmailerException();
     }
+
     /**
      * @throws \phpmailerException
      */
-    public function postSend()
+    public function send()
     {
         throw new \phpmailerException();
     }
