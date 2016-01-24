@@ -26,7 +26,7 @@ class MailParseTest extends MailWrapperTestBootstrap
      */
     public function testString()
     {
-        $email = self::$to[0];
+        $email = self::$toAddresses[0];
         $this->assertCount(1, MailAddressManager::combineRecipients($email));
     }
 
@@ -82,7 +82,7 @@ class MailParseTest extends MailWrapperTestBootstrap
      */
     public function testClass()
     {
-        $emailString = self::$to[0];
+        $emailString = self::$toAddresses[0];
 
         $email = new TesterEmailEntity();
         $email->setEmail($emailString);
@@ -116,7 +116,7 @@ class MailParseTest extends MailWrapperTestBootstrap
      */
     public function testClassString()
     {
-        $emailString = self::$to[0];
+        $emailString = self::$toAddresses[0];
 
         $email = new TesterEmailEntityString();
         $email->myEmail = $emailString;

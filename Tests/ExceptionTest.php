@@ -58,13 +58,14 @@ class ExceptionTest extends MailWrapperTestBootstrap
 
         $transport = new \Swift_NullTransport();
 
-        $e = (new MailWrapperMailableException)->setParams(['test1' => 'test2']);
+        $exception = (new MailWrapperMailableException)->setParams(['test1' => 'test2']);
+
         MailManager::sendExceptionTo(
-            $transport,
             'hello@example.com',
             'hello@example.com',
-            $e,
-            'hello@example.com'
+            $exception,
+            'hello@example.com',
+            $transport
         );
     }
 }

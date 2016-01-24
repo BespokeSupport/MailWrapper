@@ -4,3 +4,4 @@
 /vendor/
 /build/
 /*.php
+!/tests.bootstrap.php

@@ -25,7 +25,7 @@ class SendGenericTest extends MailWrapperTestBootstrap
     public function testException()
     {
         $transport = null;
-        MailManager::sendTo($transport, 'hello@example.com', 'subject', 'content', null);
+        MailManager::sendTo('hello@example.com', 'subject', 'content', null, $transport);
     }
 
     /**
@@ -33,7 +33,7 @@ class SendGenericTest extends MailWrapperTestBootstrap
      */
     public function testExceptionNullValidEmail()
     {
-        MailManager::sendTo(null, null, null, null, 'hello@example.com');
+        MailManager::sendTo(null, null, null, 'hello@example.com', null);
     }
 
     /**
@@ -57,7 +57,7 @@ class SendGenericTest extends MailWrapperTestBootstrap
      */
     public function testSendExceptionNullValidEmail()
     {
-        MailManager::sendExceptionTo(null, null, null, new \Exception('test'), 'hello@example.com');
+        MailManager::sendExceptionTo(null, null, new \Exception('test'), 'hello@example.com', null);
     }
 
     /**
@@ -65,7 +65,7 @@ class SendGenericTest extends MailWrapperTestBootstrap
      */
     public function testSendExceptionNulls()
     {
-        MailManager::sendExceptionTo(null, null, null, new \Exception('test'), null);
+        MailManager::sendExceptionTo(null, null, new \Exception('test'), null, null);
     }
 
     /**

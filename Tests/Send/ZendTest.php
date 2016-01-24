@@ -9,15 +9,17 @@
  * @link     https://github.com/BespokeSupport/MailWrapper
  */
 
-namespace BespokeSupport\MailWrapper\Tests;
+namespace BespokeSupport\MailWrapper\Tests\Send;
 
 use BespokeSupport\MailWrapper\MailManager;
+use BespokeSupport\MailWrapper\MailManagerSendZend;
+use BespokeSupport\MailWrapper\Tests\MailWrapperTestBootstrap;
 use Zend\Mail\Message;
 use Zend\Mail\Transport\InMemory;
 
 /**
  * Class ZendTest
- * @package BespokeSupport\MailWrapper\Tests
+ * @package BespokeSupport\MailWrapper\Tests\Send
  */
 class ZendTest extends MailWrapperTestBootstrap
 {
@@ -39,7 +41,7 @@ class ZendTest extends MailWrapperTestBootstrap
         $transport = new InMemory();
         $message = null;
 
-        MailManager::sendViaZend($transport, $message);
+        MailManagerSendZend::send($transport, $message);
     }
 
     /**
@@ -50,7 +52,7 @@ class ZendTest extends MailWrapperTestBootstrap
         $transport = new InMemory();
         $message = new Message();
 
-        MailManager::sendViaZend($transport, $message);
+        MailManagerSendZend::send($transport, $message);
     }
 
     /**

@@ -36,12 +36,12 @@ class MailParseArraysTest extends MailWrapperTestBootstrap
      */
     public function testTwoArray()
     {
-        $email = self::$to;
+        $email = self::$toAddresses;
 
         $response = MailAddressManager::combineRecipients($email);
 
         $this->assertCount(2, $response);
-        $this->assertEquals(self::$to[0], $response[0]);
+        $this->assertEquals(self::$toAddresses[0], $response[0]);
     }
 
     /**
@@ -49,13 +49,13 @@ class MailParseArraysTest extends MailWrapperTestBootstrap
      */
     public function testTwoArraysArray()
     {
-        $response = MailAddressManager::combineRecipients(self::$to, self::$cc);
+        $response = MailAddressManager::combineRecipients(self::$toAddresses, self::$ccAddresses);
 
         $this->assertCount(4, $response);
-        $this->assertEquals(self::$to[0], $response[0]);
-        $this->assertEquals(self::$to[1], $response[1]);
-        $this->assertEquals(self::$cc[0], $response[2]);
-        $this->assertEquals(self::$cc[1], $response[3]);
+        $this->assertEquals(self::$toAddresses[0], $response[0]);
+        $this->assertEquals(self::$toAddresses[1], $response[1]);
+        $this->assertEquals(self::$ccAddresses[0], $response[2]);
+        $this->assertEquals(self::$ccAddresses[1], $response[3]);
     }
 
     /**
@@ -63,10 +63,10 @@ class MailParseArraysTest extends MailWrapperTestBootstrap
      */
     public function testTwoArraysOneArray()
     {
-        $response = MailAddressManager::combineRecipients([self::$to[0]], [self::$to[0]]);
+        $response = MailAddressManager::combineRecipients([self::$toAddresses[0]], [self::$toAddresses[0]]);
 
         $this->assertCount(1, $response);
-        $this->assertEquals(self::$to[0], $response[0]);
+        $this->assertEquals(self::$toAddresses[0], $response[0]);
     }
 
     /**
@@ -74,11 +74,11 @@ class MailParseArraysTest extends MailWrapperTestBootstrap
      */
     public function testTwoArraysTwoArray()
     {
-        $response = MailAddressManager::combineRecipients(self::$to, self::$to);
+        $response = MailAddressManager::combineRecipients(self::$toAddresses, self::$toAddresses);
 
         $this->assertCount(2, $response);
-        $this->assertEquals(self::$to[0], $response[0]);
-        $this->assertEquals(self::$to[1], $response[1]);
+        $this->assertEquals(self::$toAddresses[0], $response[0]);
+        $this->assertEquals(self::$toAddresses[1], $response[1]);
     }
 
     /**
@@ -91,8 +91,8 @@ class MailParseArraysTest extends MailWrapperTestBootstrap
         $response = MailAddressManager::combineRecipients($email);
 
         $this->assertCount(2, $response);
-        $this->assertEquals(self::$to[0], $response[0]);
-        $this->assertEquals(self::$to[1], $response[1]);
+        $this->assertEquals(self::$toAddresses[0], $response[0]);
+        $this->assertEquals(self::$toAddresses[1], $response[1]);
     }
 
     /**
@@ -101,12 +101,12 @@ class MailParseArraysTest extends MailWrapperTestBootstrap
     public function testTwoMultiLevelArraysTwoArray()
     {
         $email1 = [
-            self::$to,
+            self::$toAddresses,
             self::$from,
         ];
         $email2 = [
-            self::$bcc,
-            self::$cc,
+            self::$bccAddresses,
+            self::$ccAddresses,
         ];
 
         $response = MailAddressManager::combineRecipients($email1, $email2);

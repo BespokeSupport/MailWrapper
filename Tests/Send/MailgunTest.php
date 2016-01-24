@@ -9,16 +9,18 @@
  * @link     https://github.com/BespokeSupport/MailWrapper
  */
 
-namespace BespokeSupport\MailWrapper\Tests;
+namespace BespokeSupport\MailWrapper\Tests\Send;
 
 use BespokeSupport\MailWrapper\MailgunManager;
 use BespokeSupport\MailWrapper\MailManager;
+use BespokeSupport\MailWrapper\MailManagerSendMailgun;
 use BespokeSupport\MailWrapper\TesterTransport\TesterTransportMailgunException;
 use BespokeSupport\MailWrapper\TesterTransport\TesterTransportMailgunNull;
+use BespokeSupport\MailWrapper\Tests\MailWrapperTestBootstrap;
 
 /**
  * Class MailgunTest
- * @package BespokeSupport\MailWrapper\Tests
+ * @package BespokeSupport\MailWrapper\Tests\Send
  */
 class MailgunTest extends MailWrapperTestBootstrap
 {
@@ -101,7 +103,7 @@ class MailgunTest extends MailWrapperTestBootstrap
         $apiKey = 'key';
         $domain = 'example.com';
         $manager = new MailgunManager($apiKey, $domain);
-        MailManager::sendViaMailgun($manager, null);
+        MailManagerSendMailgun::send($manager, null);
     }
 
     /**
@@ -119,8 +121,8 @@ class MailgunTest extends MailWrapperTestBootstrap
             'hello@example.com',
             'hello@example.com'
         );
-        $message->addCc('hello1@example.com');
-        $message->addBCc('hello2@example.com');
+        $message->addCcRecipient('hello1@example.com');
+        $message->addBccRecipient('hello2@example.com');
 
         MailManager::sendVia($manager, $message);
     }
@@ -160,7 +162,7 @@ class MailgunTest extends MailWrapperTestBootstrap
             'hello@example.com'
         );
 
-        MailManager::sendViaMailgun($manager, $message);
+        MailManagerSendMailgun::send($manager, $message);
     }
 
     /**
@@ -174,7 +176,7 @@ class MailgunTest extends MailWrapperTestBootstrap
 
         $toMails = [];
 
-        for ($i = 0; $i <= 1003; $i++) {
+        for ($i = 0; $i <= 1001; $i++) {
             $toMails[] = $i . 'hello@example.com';
         }
 
@@ -185,6 +187,6 @@ class MailgunTest extends MailWrapperTestBootstrap
             $toMails
         );
 
-        MailManager::sendViaMailgun($manager, $message);
+        MailManagerSendMailgun::send($manager, $message);
     }
 }

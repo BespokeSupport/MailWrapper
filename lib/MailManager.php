@@ -11,7 +11,6 @@
 
 namespace BespokeSupport\MailWrapper;
 
-use Zend\Mail\Message;
 use Zend\Mail\Transport\TransportInterface;
 
 /**
@@ -25,7 +24,7 @@ class MailManager
      * @param string
      * @param string
      * @param array|string
-     * @return bool|\Swift_Message
+     * @return bool|MailWrappedMessage
      * @throws MailWrapperSetupException
      */
     public static function getMailMessage()
@@ -42,22 +41,26 @@ class MailManager
             return false;
         }
 
-        if (!class_exists('Swift_Message')) {
-            //@codeCoverageIgnoreStart
-            throw new MailWrapperSetupException('SwiftMail not found');
-            //@codeCoverageIgnoreEnd
+        $message = new MailWrappedMessage();
+        $message->setFrom($fromEmail);
+        $message->setSubject($subject);
+        $message->setContentHtml($content);
+        $message->setContentText($content);
+
+        foreach ($toEmails as $address) {
+            $message->addToRecipient($address);
         }
 
-        $message = \Swift_Message::newInstance();
-
-        $message
-            ->setFrom($fromEmail)
-            ->setSubject($subject)
-            ->setBody($content);
-
-        $message->setTo($toEmails);
-
         return $message;
+    }
+
+    /**
+     * @param $address
+     * @return string|false
+     */
+    public static function isEmailAddress($address)
+    {
+        return filter_var($address, FILTER_VALIDATE_EMAIL);
     }
 
     /**
@@ -71,10 +74,12 @@ class MailManager
 
         $message = array_shift($args);
 
+        // re-add message to args as PHPMailer is both transport and message
         if ($message instanceof \PHPMailer) {
             $args[] = $message;
-            $message = MessageTransformer::phpMailerToSwift($message);
         }
+
+        $message = MessageTransformer::convert($message);
 
         if (!count($args)) {
             throw new MailWrapperSetupException('No Transports available');
@@ -106,7 +111,7 @@ class MailManager
      * @return bool|int
      * @throws MailWrapperSetupException
      */
-    public static function sendExceptionTo($transport, $fromEmail, $subject, \Exception $exception, $toEmails)
+    public static function sendExceptionTo($fromEmail, $subject, \Exception $exception, $toEmails, $transport)
     {
         if (!$toEmails) {
             throw new MailWrapperSetupException('No TO emails provided');
@@ -144,7 +149,7 @@ class MailManager
      * @return bool|int
      * @throws MailWrapperSetupException
      */
-    public static function sendTo($transport, $fromEmail, $subject, $content, $toEmails)
+    public static function sendTo($fromEmail, $subject, $content, $toEmails, $transport)
     {
         if (!$toEmails) {
             throw new MailWrapperSetupException('No TO emails provided');
@@ -165,119 +170,16 @@ class MailManager
     {
         switch (true) {
             case ($transport instanceof MailgunManager):
-                return static::sendViaMailgun($transport, $message);
-            case ($transport instanceof \Swift_Mailer):
-                return static::sendViaSwiftMailer($transport, $message);
-            case ($transport instanceof \Swift_Transport):
-                return static::sendViaSwiftMailer($transport, $message);
+                return MailManagerSendMailgun::send($transport, $message);
             case ($transport instanceof \PHPMailer):
-                return static::sendViaPhpMailer($transport, $message);
+                return MailManagerSendPhpMailer::send($transport, $message);
+            case ($transport instanceof \Swift_Mailer):
+            case ($transport instanceof \Swift_Transport):
+                return MailManagerSendSwift::send($transport, $message);
             case ($transport instanceof TransportInterface):
-                return static::sendViaZend($transport, $message);
+                return MailManagerSendZend::send($transport, $message);
             default:
                 throw new MailWrapperSetupException('No Transport available');
         }
-    }
-
-    /**
-     * @param MailgunManager $transport
-     * @param \Swift_Mime_Message|null $message
-     * @return bool|int
-     * @throws MailWrapperSetupException
-     * @throws \Exception
-     * @throws \Mailgun\Messages\Exceptions\TooManyParameters
-     */
-    public static function sendViaMailgun(MailgunManager $transport, \Swift_Mime_Message $message = null)
-    {
-        if (!$message) {
-            throw new MailWrapperSetupException('No Message');
-        }
-
-        $batch = MessageTransformer::swiftToMailgun($message, $transport);
-
-        try {
-            $batch->finalize();
-        } catch (\Exception $e) {
-            throw new MailWrapperSendException(
-                $e->getMessage(),
-                $e->getCode(),
-                $e
-            );
-        }
-
-        $ids = $batch->getMessageIds();
-
-        return ((1 == count($ids))) ? $ids[0] : false;
-    }
-
-    /**
-     * @param \PHPMailer $mailer
-     * @param null $message
-     * @return bool
-     * @throws MailWrapperSendException
-     * @throws MailWrapperSetupException
-     */
-    public static function sendViaPhpMailer(\PHPMailer $mailer, $message = null)
-    {
-        if (!$mailer->From && $message) {
-            // todo merge message with transport
-        }
-        try {
-            $mailer->preSend();
-        } catch (\Exception $e) {
-            throw new MailWrapperSetupException(
-                $e->getMessage(),
-                $e->getCode(),
-                $e
-            );
-        }
-
-        try {
-            return $mailer->postSend();
-        } catch (\Exception $e) {
-            throw new MailWrapperSendException(
-                $e->getMessage(),
-                $e->getCode(),
-                $e
-            );
-        }
-    }
-
-    /**
-     * @param \Swift_Mailer|\Swift_Transport $mailer
-     * @param \Swift_Mime_Message|null $message
-     * @return bool|int
-     * @throws MailWrapperSetupException
-     */
-    public static function sendViaSwiftMailer($mailer, $message = null)
-    {
-        if ($mailer instanceof \Swift_Transport) {
-            $mailer = \Swift_Mailer::newInstance($mailer);
-        }
-
-        if (!($mailer instanceof \Swift_Mailer)) {
-            throw new MailWrapperSetupException('SwiftMail not Mailer');
-        }
-
-        if (!($message instanceof \Swift_Message)) {
-            throw new MailWrapperSetupException('Message not constructed');
-        }
-
-        return $mailer->send($message);
-    }
-
-    /**
-     * @param TransportInterface $transport
-     * @param Message|null $message
-     * @return mixed
-     * @throws MailWrapperSetupException
-     */
-    public static function sendViaZend(TransportInterface $transport, $message = null)
-    {
-        if (!($message instanceof Message)) {
-            throw new MailWrapperSetupException('Message not constructed');
-        }
-
-        return $transport->send($message);
     }
 }

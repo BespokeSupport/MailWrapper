@@ -9,14 +9,16 @@
  * @link     https://github.com/BespokeSupport/MailWrapper
  */
 
-namespace BespokeSupport\MailWrapper\Tests;
+namespace BespokeSupport\MailWrapper\Tests\Send;
 
 use BespokeSupport\MailWrapper\MailManager;
+use BespokeSupport\MailWrapper\MailManagerSendSwift;
 use BespokeSupport\MailWrapper\TesterTransport\TesterTransportSwiftException;
+use BespokeSupport\MailWrapper\Tests\MailWrapperTestBootstrap;
 
 /**
  * Class SwiftMailTest
- * @package BespokeSupport\MailWrapper\Tests
+ * @package BespokeSupport\MailWrapper\Tests\Send
  */
 class SwiftMailTest extends MailWrapperTestBootstrap
 {
@@ -37,7 +39,7 @@ class SwiftMailTest extends MailWrapperTestBootstrap
     {
         $transport = new \Swift_NullTransport();
         $message = null;
-        MailManager::sendViaSwiftMailer($transport, $message);
+        MailManagerSendSwift::send($transport, $message);
     }
 
     /**
@@ -46,7 +48,7 @@ class SwiftMailTest extends MailWrapperTestBootstrap
     public function testExceptionTransport()
     {
         $transport = null;
-        MailManager::sendViaSwiftMailer($transport);
+        MailManagerSendSwift::send($transport);
     }
 
     /**
@@ -61,7 +63,7 @@ class SwiftMailTest extends MailWrapperTestBootstrap
             'hello@example.com',
             'hello@example.com'
         );
-        MailManager::sendViaSwiftMailer($transport, $message);
+        MailManagerSendSwift::send($transport, $message);
     }
 
     /**
