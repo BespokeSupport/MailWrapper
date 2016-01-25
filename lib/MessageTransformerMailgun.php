@@ -44,9 +44,11 @@ class MessageTransformerMailgun implements MessageTransformerInterface
             $message->addBccRecipient($address);
         }
 
+        $message->setFromAddress($wrappedMessage->getFrom());
         $message->setSubject($wrappedMessage->getSubject());
         $message->setTextBody($wrappedMessage->getContentText());
         $message->setHtmlBody($wrappedMessage->getContentHtml());
+        $message->setReplyToAddress($wrappedMessage->getReplyTo());
 
         return $message;
     }
