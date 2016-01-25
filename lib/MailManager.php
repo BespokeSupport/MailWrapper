@@ -56,7 +56,6 @@ class MailManager
         $message = new MailWrappedMessage();
         $message->setFrom($fromEmail);
         $message->setSubject($subject);
-        $message->setContentHtml($content);
         $message->setContentText($content);
 
         foreach ($toEmails as $address) {
