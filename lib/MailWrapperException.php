@@ -17,4 +17,16 @@ namespace BespokeSupport\MailWrapper;
  */
 class MailWrapperException extends \Exception
 {
+    /**
+     * @return array
+     */
+    public function __sleep()
+    {
+        return [
+            'message',
+            'code',
+            'file',
+            'line',
+        ];
+    }
 }
