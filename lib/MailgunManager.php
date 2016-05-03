@@ -37,7 +37,15 @@ class MailgunManager extends Mailgun
         }
         $this->domain = $domain;
         $this->apiKey = $apiKey;
-        parent::__construct($apiKey);
+
+        // fixes for Puli factory breakages
+        $client = null;
+        if (class_exists('\Http\Adapter\Guzzle6\Client')) {
+            $guzzleClient = new \GuzzleHttp\Client();
+            $client = new \Http\Adapter\Guzzle6\Client($guzzleClient);
+        }
+
+        parent::__construct($apiKey, $client);
     }
 
     /**
