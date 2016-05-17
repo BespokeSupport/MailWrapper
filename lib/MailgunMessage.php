@@ -76,4 +76,20 @@ class MailgunMessage extends BatchMessage
 
         return $this->counters['recipients'][$field];
     }
+
+    /**
+     * @return null|string
+     */
+    public function send()
+    {
+        $this->sendMessage();
+
+        $ids = $this->getMessageIds();
+
+        if (count($ids)) {
+            return $ids[0];
+        }
+
+        return null;
+    }
 }
