@@ -38,9 +38,17 @@ class MessageTransformerSwift implements MessageTransformerInterface
             $message->addBcc($address);
         }
 
+        $message->setReplyTo($wrappedMessage->getReplyTo());
+        $message->setFrom($wrappedMessage->getFrom());
         $message->setSubject($wrappedMessage->getSubject());
-        $message->setBody($wrappedMessage->getContentText());
-        $message->setBody($wrappedMessage->getContentHtml(), 'text/html');
+
+        if ($wrappedMessage->getContentText()) {
+            $message->setBody($wrappedMessage->getContentText());
+        }
+
+        if ($wrappedMessage->getContentHtml()) {
+            $message->setBody($wrappedMessage->getContentHtml(), 'text/html');
+        }
 
         return $message;
     }

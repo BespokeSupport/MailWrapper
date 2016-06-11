@@ -22,6 +22,20 @@ class MailWrapperMailableException extends MailWrapperException
     /**
      * @return array
      */
+    public function __sleep()
+    {
+        return [
+            'params',
+            'message',
+            'code',
+            'file',
+            'line',
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function getParams()
     {
         return $this->params;

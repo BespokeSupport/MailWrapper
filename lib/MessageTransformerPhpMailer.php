@@ -74,11 +74,22 @@ class MessageTransformerPhpMailer implements MessageTransformerInterface
             $wrappedMessage = self::toWrappedMessage($message);
         }
 
+        $message->AddReplyTo($wrappedMessage->getReplyTo());
         $message->From = $wrappedMessage->getFrom();
+
         foreach ($wrappedMessage->getToRecipients() as $address) {
-            $message->addAddress($address);
+            $message->AddAddress($address);
         }
 
+        foreach ($wrappedMessage->getCcRecipients() as $address) {
+            $message->AddCC($address);
+        }
+
+        foreach ($wrappedMessage->getBccRecipients() as $address) {
+            $message->AddBCC($address);
+        }
+
+        $message->Subject = $wrappedMessage->getSubject();
         $message->Body = $wrappedMessage->getContentHtml();
         $message->AltBody = $wrappedMessage->getContentText();
 

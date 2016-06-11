@@ -20,6 +20,18 @@ use Zend\Mail\Transport\TransportInterface;
 class MailManager
 {
     /**
+     * @var bool
+     */
+    private static $debug = false;
+
+    /**
+     *
+     */
+    public static function debug()
+    {
+        self::$debug = true;
+    }
+    /**
      * @param string
      * @param string
      * @param string
@@ -44,7 +56,6 @@ class MailManager
         $message = new MailWrappedMessage();
         $message->setFrom($fromEmail);
         $message->setSubject($subject);
-        $message->setContentHtml($content);
         $message->setContentText($content);
 
         foreach ($toEmails as $address) {
@@ -93,6 +104,9 @@ class MailManager
                 return static::sendVia($transport, $message);
             } catch (\Exception $e) {
                 if ($e instanceof MailWrapperSetupException) {
+                    throw $e;
+                }
+                if (self::$debug) {
                     throw $e;
                 }
                 continue;

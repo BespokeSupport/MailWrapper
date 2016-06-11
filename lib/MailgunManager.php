@@ -11,6 +11,10 @@
 
 namespace BespokeSupport\MailWrapper;
 
+use GuzzleHttp\Client;
+use \Http\Adapter\Guzzle6\Client as Guzzle6Client;
+use \Http\Adapter\Guzzle5\Client as Guzzle5Client;
+use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Mailgun\Mailgun;
 
 /**
@@ -37,7 +41,18 @@ class MailgunManager extends Mailgun
         }
         $this->domain = $domain;
         $this->apiKey = $apiKey;
-        parent::__construct($apiKey);
+
+        // fixes for Puli factory breakages
+        $client = null;
+        if (class_exists('\Http\Adapter\Guzzle6\Client')) {
+            $guzzleClient = new Client();
+            $client = new Guzzle6Client($guzzleClient);
+        } else if (class_exists('\Http\Adapter\Guzzle5\Client')) {
+            $guzzleClient = new Client();
+            $factory = new GuzzleMessageFactory();
+            $client = new Guzzle5Client($guzzleClient, $factory);
+        }
+        parent::__construct($apiKey, $client);
     }
 
     /**

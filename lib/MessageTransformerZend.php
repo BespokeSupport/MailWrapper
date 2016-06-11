@@ -40,11 +40,19 @@ class MessageTransformerZend implements MessageTransformerInterface
             $message->addBcc($address);
         }
 
+        $message->setReplyTo($wrappedMessage->getReplyTo());
+        $message->setFrom($wrappedMessage->getFrom());
         $message->setSubject($wrappedMessage->getSubject());
 
-        // todo multi-part
-        $text = ($wrappedMessage->getContentHtml()) ?: $wrappedMessage->getContentText();
-        $message->setBody($text);
+        if ($wrappedMessage->getContentText()) {
+            $message->setBody($wrappedMessage->getContentText());
+        }
+
+        if ($wrappedMessage->getContentHtml()) {
+            $html = new MimePart($wrappedMessage->getContentHtml());
+            $html->type = "text/html";
+            $message->setBody($body);
+        }
 
         return $message;
     }
