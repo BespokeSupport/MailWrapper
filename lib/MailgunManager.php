@@ -72,4 +72,48 @@ class MailgunManager extends Mailgun
     {
         return new self($apiKey, $domain);
     }
+
+    /**
+     * @param string $endpointUrl
+     * @param array $queryString
+     * @return \stdClass
+     */
+    public function get($endpointUrl, $queryString = array())
+    {
+        $url = $this->domain . $endpointUrl;
+        return parent::get($url, $queryString);
+    }
+
+    /**
+     * @param string $endpointUrl
+     * @param array $queryString
+     * @return \stdClass
+     */
+    public function post($endpointUrl, $queryString = array(), $files = array())
+    {
+        $url = $this->domain . $endpointUrl;
+        return parent::post($url, $queryString, $files);
+    }
+
+    /**
+     * @param string $endpointUrl
+     * @param array $queryString
+     * @return \stdClass
+     */
+    public function put($endpointUrl, $queryString = array())
+    {
+        $url = $this->domain . $endpointUrl;
+        return parent::put($url, $queryString);
+    }
+
+    /**
+     * @param string $endpointUrl
+     * @param array $queryString
+     * @return \stdClass
+     */
+    public function delete($endpointUrl, $queryString = array())
+    {
+        $url = $this->domain . $endpointUrl;
+        return parent::delete($url, $queryString);
+    }
 }
