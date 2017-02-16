@@ -60,6 +60,11 @@ class MailWrappedMessage
     protected $wrappedMessage;
 
     /**
+     * @var string
+     */
+    public $template;
+
+    /**
      * MailWrappedMessage constructor.
      * @param $message MailWrappedMessage
      * @return MailWrappedMessage|self
@@ -282,7 +287,7 @@ class MailWrappedMessage
      */
     public function setContentHtml($contentHtml)
     {
-        $this->contentHtml = $contentHtml;
+        $this->contentHtml = trim($contentHtml);
     }
 
     /**
@@ -290,7 +295,7 @@ class MailWrappedMessage
      */
     public function setContentText($contentText)
     {
-        $this->contentText = $contentText;
+        $this->contentText = trim($contentText);
     }
 
     /**
@@ -314,7 +319,7 @@ class MailWrappedMessage
      */
     public function setSubject($subject)
     {
-        $this->subject = $subject;
+        $this->subject = trim($subject);
     }
 
     /**
