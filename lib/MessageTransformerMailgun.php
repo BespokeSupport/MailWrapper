@@ -56,6 +56,9 @@ class MessageTransformerMailgun implements MessageTransformerInterface
             $message->setHtmlBody($wrappedMessage->getContentHtml());
         }
 
+        foreach ($wrappedMessage->getAttachments() as $attachment) {
+            $message->addAttachment($attachment->file->getPathname(), $attachment->getName());
+        }
 
         return $message;
     }

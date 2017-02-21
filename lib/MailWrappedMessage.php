@@ -23,6 +23,26 @@ use Zend\Mail\Message;
 class MailWrappedMessage
 {
     /**
+     *
+     */
+    const CONTENT_BOTH = 3;
+    /**
+     *
+     */
+    const CONTENT_HTML = 2;
+    /**
+     *
+     */
+    const CONTENT_TEXT = 1;
+    /**
+     *
+     */
+    const CONTENT_NONE = 0;
+    /**
+     * @var MessageAttachment[]
+     */
+    protected $attachments = [];
+    /**
      * @var array
      */
     protected $bccRecipients = [];
@@ -58,7 +78,6 @@ class MailWrappedMessage
      * @var Swift_Message|PHPMailer|MessageBuilder|Message
      */
     protected $wrappedMessage;
-
     /**
      * @var string
      */
@@ -87,6 +106,18 @@ class MailWrappedMessage
             $this->setCcRecipients($message->getCcRecipients());
             $this->setBccRecipients($message->getBccRecipients());
         }
+    }
+
+    /**
+     * @param MessageAttachment $attachment
+     */
+    public function addAttachment(MessageAttachment $attachment)
+    {
+        if (!$attachment->file) {
+            throw new \UnexpectedValueException('Unknown path to file attachment');
+        }
+
+        $this->attachments[] = $attachment;
     }
 
     /**
@@ -159,6 +190,14 @@ class MailWrappedMessage
     }
 
     /**
+     * @return MessageAttachment[]
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+
+    /**
      * @return array
      */
     public function getBccRecipients()
@@ -188,6 +227,26 @@ class MailWrappedMessage
     public function getContentText()
     {
         return $this->contentText;
+    }
+
+    /**
+     * @return int
+     */
+    public function getContentType()
+    {
+        switch (true) {
+            case ($this->contentHtml && $this->contentText):
+                return self::CONTENT_BOTH;
+                break;
+            case ($this->contentHtml):
+                return self::CONTENT_HTML;
+                break;
+            case ($this->contentText):
+                return self::CONTENT_TEXT;
+                break;
+            default:
+                return self::CONTENT_NONE;
+        }
     }
 
     /**
@@ -231,6 +290,18 @@ class MailWrappedMessage
     }
 
     /**
+     * @return array
+     */
+    public function getAllRecipients()
+    {
+        return array_merge(
+            $this->getToRecipients(),
+            $this->getCcRecipients(),
+            $this->getBccRecipients()
+        );
+    }
+
+    /**
      * @return null|MessageBuilder|PHPMailer|Swift_Message|Message
      */
     public function getWrappedMessage()
@@ -260,6 +331,14 @@ class MailWrappedMessage
         }
 
         return new self($message);
+    }
+
+    /**
+     * @param MessageAttachment[] $attachments
+     */
+    public function setAttachments(array $attachments)
+    {
+        $this->attachments = $attachments;
     }
 
     /**

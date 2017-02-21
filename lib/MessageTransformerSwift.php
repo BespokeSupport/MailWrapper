@@ -43,11 +43,11 @@ class MessageTransformerSwift implements MessageTransformerInterface
         $message->setSubject($wrappedMessage->getSubject());
 
         if ($wrappedMessage->getContentText()) {
-            $message->setBody($wrappedMessage->getContentText());
+            $message->setBody($wrappedMessage->getContentText(), 'text/plain');
         }
 
         if ($wrappedMessage->getContentHtml()) {
-            $message->setBody($wrappedMessage->getContentHtml(), 'text/html');
+            $message->addPart($wrappedMessage->getContentHtml(), 'text/html');
         }
 
         return $message;
