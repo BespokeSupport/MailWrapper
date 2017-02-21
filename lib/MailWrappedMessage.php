@@ -304,6 +304,10 @@ class MailWrappedMessage
     public function setFrom($from)
     {
         $this->from = $from;
+
+        if (!$this->replyTo) {
+            $this->replyTo = $from;
+        }
     }
 
     /**
