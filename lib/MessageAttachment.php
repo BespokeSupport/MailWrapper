@@ -27,10 +27,10 @@ class MessageAttachment
 
     /**
      * MessageAttachment constructor.
-     * @param \SplFileObject $file
+     * @param \SplFileInfo $file
      * @param null $name
      */
-    public function __construct(\SplFileObject $file, $name = null)
+    public function __construct(\SplFileInfo $file, $name = null)
     {
         $this->file = $file;
         $this->name = $name;
