@@ -345,6 +345,8 @@ class MailWrappedMessage
      */
     public function setBccRecipients(array $addresses = [])
     {
+        $this->bccRecipients = [];
+
         foreach ($addresses as $address) {
             $this->addBccRecipient($address);
         }
@@ -355,6 +357,8 @@ class MailWrappedMessage
      */
     public function setCcRecipients(array $addresses = [])
     {
+        $this->ccRecipients = [];
+
         foreach ($addresses as $address) {
             $this->addCcRecipient($address);
         }
@@ -409,6 +413,8 @@ class MailWrappedMessage
      */
     public function setToRecipients(array $addresses = [])
     {
+        $this->toRecipients = [];
+
         foreach ($addresses as $address) {
             $this->addToRecipient($address);
         }
