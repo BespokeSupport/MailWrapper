@@ -27,16 +27,18 @@
   },
   "require-dev": {
     "swiftmailer/swiftmailer": "~4|~5",
-    "mailgun/mailgun-php": "1.7.*",
+    "mailgun/mailgun-php": "2.*",
     "phpmailer/phpmailer": "~5.2",
     "zendframework/zend-mail": "@stable",
-    "pda/pheanstalk": "^3.1"
+    "pda/pheanstalk": "^3.1",
+    "php-http/guzzle6-adapter": "1.*"
   },
   "suggest": {
     "swiftmailer/swiftmailer": "~4|~5",
-    "mailgun/mailgun-php": "1.7.*",
+    "mailgun/mailgun-php": "2.*",
     "phpmailer/phpmailer": "~5.2",
     "zendframework/zend-mail": "@stable",
-    "pda/pheanstalk": "^3.1"
+    "pda/pheanstalk": "^3.1",
+    "php-http/guzzle6-adapter": "1.*"
   }
 }
