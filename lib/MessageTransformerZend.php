@@ -53,7 +53,7 @@ class MessageTransformerZend implements MessageTransformerInterface
         if ($wrappedMessage->getContentHtml()) {
             $html = new Part($wrappedMessage->getContentHtml());
             $html->type = Mime::TYPE_HTML;
-            $message->setBody($html);
+            $message->setBody($html->getContent());
         }
 
         return $message;
