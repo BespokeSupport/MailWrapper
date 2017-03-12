@@ -12,6 +12,8 @@
 namespace BespokeSupport\MailWrapper;
 
 use Zend\Mail\Message;
+use Zend\Mime\Mime;
+use Zend\Mime\Part;
 
 /**
  * Class MessageTransformerZend
@@ -49,9 +51,9 @@ class MessageTransformerZend implements MessageTransformerInterface
         }
 
         if ($wrappedMessage->getContentHtml()) {
-            $html = new MimePart($wrappedMessage->getContentHtml());
-            $html->type = "text/html";
-            $message->setBody($body);
+            $html = new Part($wrappedMessage->getContentHtml());
+            $html->type = Mime::TYPE_HTML;
+            $message->setBody($html);
         }
 
         return $message;
