@@ -11,11 +11,6 @@
 
 namespace BespokeSupport\MailWrapper;
 
-use Mailgun\Messages\MessageBuilder;
-use PHPMailer;
-use Swift_Message;
-use Zend\Mail\Message;
-
 /**
  * Class MessageAttachment
  * @package BespokeSupport\MailWrapper

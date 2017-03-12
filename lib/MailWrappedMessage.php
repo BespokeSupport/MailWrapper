@@ -86,7 +86,6 @@ class MailWrappedMessage
     /**
      * MailWrappedMessage constructor.
      * @param $message MailWrappedMessage
-     * @return MailWrappedMessage|self
      * @throws MailWrapperSetupException
      */
     public function __construct($message = null)

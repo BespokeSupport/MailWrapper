@@ -13,8 +13,6 @@ namespace BespokeSupport\MailWrapper;
 
 use GuzzleHttp\Client;
 use \Http\Adapter\Guzzle6\Client as Guzzle6Client;
-use \Http\Adapter\Guzzle5\Client as Guzzle5Client;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Mailgun\Mailgun;
 
 /**
@@ -47,10 +45,6 @@ class MailgunManager extends Mailgun
         if (class_exists('\Http\Adapter\Guzzle6\Client')) {
             $guzzleClient = new Client();
             $client = new Guzzle6Client($guzzleClient);
-        } else if (class_exists('\Http\Adapter\Guzzle5\Client')) {
-            $guzzleClient = new Client();
-            $factory = new GuzzleMessageFactory();
-            $client = new Guzzle5Client($guzzleClient, $factory);
         }
         parent::__construct($apiKey, $client);
     }
@@ -87,6 +81,7 @@ class MailgunManager extends Mailgun
     /**
      * @param string $endpointUrl
      * @param array $queryString
+     * @param array $files
      * @return \stdClass
      */
     public function post($endpointUrl, $queryString = array(), $files = array())
@@ -114,6 +109,6 @@ class MailgunManager extends Mailgun
     public function delete($endpointUrl, $queryString = array())
     {
         $url = $this->domain . $endpointUrl;
-        return parent::delete($url, $queryString);
+        return parent::delete($url);
     }
 }

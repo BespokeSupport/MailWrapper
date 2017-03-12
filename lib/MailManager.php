@@ -78,6 +78,7 @@ class MailManager
      * @return array|bool
      * @throws MailWrapperSendException
      * @throws MailWrapperSetupException
+     * @throws \Exception
      */
     public static function send()
     {
