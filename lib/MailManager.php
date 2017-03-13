@@ -187,7 +187,7 @@ class MailManager
             case ($transport instanceof MailgunManager):
                 return MailManagerSendMailgun::send($transport, $message);
             case ($transport instanceof PostmarkManager):
-                return MailManagerSendMailgun::send($transport, $message);
+                return MailManagerSendPostmark::send($transport, $message);
             case ($transport instanceof \PHPMailer):
                 return MailManagerSendPhpMailer::send($transport, $message);
             case ($transport instanceof \Swift_Mailer):
