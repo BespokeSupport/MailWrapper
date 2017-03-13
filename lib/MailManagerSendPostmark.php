@@ -44,6 +44,30 @@ class MailManagerSendPostmark
                 $message->getReplyTo()
             );
         }
+        foreach ($message->getCcRecipients() as $recipient) {
+            $response = $transport->sendEmail(
+                $message->getFrom(),
+                $recipient,
+                $message->getSubject(),
+                $message->getContentHtml(),
+                $message->getContentText(),
+                $message->template,
+                $transport->trackOpen,
+                $message->getReplyTo()
+            );
+        }
+        foreach ($message->getBccRecipients() as $recipient) {
+            $response = $transport->sendEmail(
+                $message->getFrom(),
+                $recipient,
+                $message->getSubject(),
+                $message->getContentHtml(),
+                $message->getContentText(),
+                $message->template,
+                $transport->trackOpen,
+                $message->getReplyTo()
+            );
+        }
 
         if ($response && isset($response->MessageID)) {
             return $response->MessageID;
