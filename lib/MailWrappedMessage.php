@@ -409,6 +409,8 @@ class MailWrappedMessage
      */
     public function setToRecipients(array $addresses = [])
     {
+        $this->toRecipients = [];
+
         foreach ($addresses as $address) {
             $this->addToRecipient($address);
         }

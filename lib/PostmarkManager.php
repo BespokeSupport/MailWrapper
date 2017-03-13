@@ -11,12 +11,16 @@
 
 namespace BespokeSupport\MailWrapper;
 
+use Postmark\PostmarkClient;
+
 /**
  * Class PostmarkManager
  * @package BespokeSupport\MailWrapper
  */
-class PostmarkManager
+class PostmarkManager extends PostmarkClient
 {
+    public $trackOpen = true;
+
     /**
      * @return PostmarkInboundMessage
      */
