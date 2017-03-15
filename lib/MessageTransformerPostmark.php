@@ -46,6 +46,7 @@ class MessageTransformerPostmark implements MessageTransformerInterface
 
         $wrappedMessage->setReplyTo($message->ReplyTo());
         $wrappedMessage->setFrom($message->FromEmail());
+        $wrappedMessage->setSubject($message->Subject());
         $wrappedMessage->setContentHtml($message->HtmlBody());
         $wrappedMessage->setContentText($message->TextBody());
 
