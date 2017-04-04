@@ -11,6 +11,7 @@
 
 namespace BespokeSupport\MailWrapper;
 
+use Postmark\Attachment;
 use Postmark\Inbound;
 
 /**
@@ -62,6 +63,18 @@ class MessageTransformerPostmark implements MessageTransformerInterface
             $wrappedMessage->addBccRecipient($recipient->Email);
         }
 
+        /**
+         * @var Attachment[] $attachments
+         */
+        $attachments = $message->Attachments();
+        foreach ($attachments as $attachment) {
+            $name = $attachment->Name;
+            $attachment->Download(sys_get_temp_dir());
+
+            $newFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $name;
+            $new = new MessageAttachment(new \SplFileInfo($newFile), $name);
+            $wrappedMessage->addAttachment($new);
+        }
 
         return $wrappedMessage;
     }
