@@ -31,7 +31,7 @@ class MailManagerSendPostmark
             throw new MailWrapperSetupException('No Message');
         }
 
-        $response = null;
+        $hash = null;
         foreach ($message->getToRecipients() as $recipient) {
             $response = $transport->sendEmail(
                 $message->getFrom(),
@@ -43,6 +43,9 @@ class MailManagerSendPostmark
                 $transport->trackOpen,
                 $message->getReplyTo()
             );
+            if ($response && isset($response['MessageID']) && $response['MessageID']) {
+                $hash = $response['MessageID'];
+            }
         }
         foreach ($message->getCcRecipients() as $recipient) {
             $response = $transport->sendEmail(
@@ -55,6 +58,9 @@ class MailManagerSendPostmark
                 $transport->trackOpen,
                 $message->getReplyTo()
             );
+            if ($response && isset($response['MessageID']) && $response['MessageID']) {
+                $hash = $response['MessageID'];
+            }
         }
         foreach ($message->getBccRecipients() as $recipient) {
             $response = $transport->sendEmail(
@@ -67,12 +73,11 @@ class MailManagerSendPostmark
                 $transport->trackOpen,
                 $message->getReplyTo()
             );
+            if ($response && isset($response['MessageID']) && $response['MessageID']) {
+                $hash = $response['MessageID'];
+            }
         }
 
-        if ($response && isset($response->MessageID)) {
-            return $response->MessageID;
-        }
-
-        return null;
+        return ($hash) ? : null;
     }
 }
