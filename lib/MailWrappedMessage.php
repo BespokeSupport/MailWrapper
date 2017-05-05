@@ -82,6 +82,10 @@ class MailWrappedMessage
      * @var string
      */
     public $template;
+    /**
+     * @var array
+     */
+    public $templateVars = [];
 
     /**
      * MailWrappedMessage constructor.
