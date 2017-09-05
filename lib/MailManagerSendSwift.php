@@ -26,7 +26,7 @@ class MailManagerSendSwift
     public static function send($mailer, $message = null)
     {
         if ($mailer instanceof \Swift_Transport) {
-            $mailer = \Swift_Mailer::newInstance($mailer);
+            $mailer = new \Swift_Mailer($mailer);
         }
 
         if (!($mailer instanceof \Swift_Mailer)) {
