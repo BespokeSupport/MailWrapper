@@ -50,6 +50,12 @@ class MessageTransformerSwift implements MessageTransformerInterface
             $message->addPart($wrappedMessage->getContentHtml(), 'text/html');
         }
 
+        if ($wrappedMessage->getAttachments()) {
+            foreach ($wrappedMessage->getAttachments() as $attachment) {
+                $message->attach(\Swift_Attachment::fromPath($attachment->file->getRealPath()));
+            }
+        }
+
         return $message;
     }
 
