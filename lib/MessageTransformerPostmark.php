@@ -51,16 +51,22 @@ class MessageTransformerPostmark implements MessageTransformerInterface
         $wrappedMessage->setContentHtml($message->HtmlBody());
         $wrappedMessage->setContentText($message->TextBody());
 
-        foreach ($message->ToFull() as $recipient) {
-            $wrappedMessage->addToRecipient($recipient->Email);
+        if (count($message->ToFull())) {
+            foreach ($message->ToFull() as $recipient) {
+                $wrappedMessage->addToRecipient($recipient->Email);
+            }
         }
 
-        foreach ($message->CcFull() as $recipient) {
-            $wrappedMessage->addCcRecipient($recipient->Email);
+        if (count($message->CcFull())) {
+            foreach ($message->CcFull() as $recipient) {
+                $wrappedMessage->addCcRecipient($recipient->Email);
+            }
         }
 
-        foreach ($message->BccFull() as $recipient) {
-            $wrappedMessage->addBccRecipient($recipient->Email);
+        if (count($message->BccFull())) {
+            foreach ($message->BccFull() as $recipient) {
+                $wrappedMessage->addBccRecipient($recipient->Email);
+            }
         }
 
         /**
@@ -69,7 +75,7 @@ class MessageTransformerPostmark implements MessageTransformerInterface
         $attachments = $message->Attachments();
         foreach ($attachments as $attachment) {
             $name = $attachment->Name;
-            $attachment->Download(sys_get_temp_dir());
+            $attachment->Download(sys_get_temp_dir() . DIRECTORY_SEPARATOR);
 
             $newFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $name;
             $new = new MessageAttachment(new \SplFileInfo($newFile), $name);
