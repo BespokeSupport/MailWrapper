@@ -10,6 +10,7 @@
  */
 
 namespace BespokeSupport\MailWrapper;
+use Postmark\Models\PostmarkAttachment;
 
 /**
  * Class MailManagerSendPostmark
@@ -31,6 +32,14 @@ class MailManagerSendPostmark
             throw new MailWrapperSetupException('No Message');
         }
 
+        $attachments = [];
+        foreach ($message->getAttachments() as $attachment) {
+            $attachments[] = PostmarkAttachment::fromRawData(
+                file_get_contents($attachment->file->getRealPath()),
+                $attachment->getName()
+            );
+        }
+
         $hash = null;
         foreach ($message->getToRecipients() as $recipient) {
             $response = $transport->sendEmail(
@@ -41,7 +50,11 @@ class MailManagerSendPostmark
                 $message->getContentText(),
                 $message->template,
                 $transport->trackOpen,
-                $message->getReplyTo()
+                $message->getReplyTo(),
+                null,
+                null,
+                null,
+                $attachments
             );
             if ($response && isset($response['MessageID']) && $response['MessageID']) {
                 $hash = $response['MessageID'];
@@ -56,7 +69,11 @@ class MailManagerSendPostmark
                 $message->getContentText(),
                 $message->template,
                 $transport->trackOpen,
-                $message->getReplyTo()
+                $message->getReplyTo(),
+                null,
+                null,
+                null,
+                $attachments
             );
             if ($response && isset($response['MessageID']) && $response['MessageID']) {
                 $hash = $response['MessageID'];
@@ -71,7 +88,11 @@ class MailManagerSendPostmark
                 $message->getContentText(),
                 $message->template,
                 $transport->trackOpen,
-                $message->getReplyTo()
+                $message->getReplyTo(),
+                null,
+                null,
+                null,
+                $attachments
             );
             if ($response && isset($response['MessageID']) && $response['MessageID']) {
                 $hash = $response['MessageID'];
