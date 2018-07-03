@@ -11,8 +11,8 @@
 
 namespace BespokeSupport\MailWrapper;
 
+use BespokeSupport\PostmarkInbound\PostmarkInbound;
 use Mailgun\Messages\MessageBuilder;
-use Postmark\Inbound;
 use Zend\Mail\Message;
 
 /**
@@ -25,7 +25,7 @@ class MessageTransformer
      * @param $message
      * @param string $destination
      * @param null $transport
-     * @return MailgunMessage|\PHPMailer|\Swift_Message|Message|MailWrappedMessage|Inbound
+     * @return MailgunMessage|\PHPMailer|\Swift_Message|Message|MailWrappedMessage|PostmarkInbound
      * @throws MailWrapperSetupException
      */
     public static function convert($message, $destination = 'wrappedMessage', $transport = null)
@@ -39,7 +39,7 @@ class MessageTransformer
             case ($message instanceof MessageBuilder):
                 $message = MessageTransformerMailgun::toWrappedMessage($message);
                 break;
-            case ($message instanceof Inbound):
+            case ($message instanceof PostmarkInbound):
                 $message = MessageTransformerPostmark::toWrappedMessage($message);
                 break;
             case ($message instanceof \PHPMailer):

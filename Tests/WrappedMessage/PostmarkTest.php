@@ -17,7 +17,7 @@ use BespokeSupport\MailWrapper\MessageTransformerPostmark;
 use BespokeSupport\MailWrapper\TesterMessage\TesterMessagePostmark;
 use BespokeSupport\MailWrapper\TesterMessage\TesterWrappedMessage;
 use BespokeSupport\MailWrapper\Tests\MailWrapperTestBootstrap;
-use Postmark\Inbound;
+use BespokeSupport\PostmarkInbound\PostmarkInbound;
 
 /**
  * Class PostmarkTest
@@ -30,8 +30,8 @@ class PostmarkTest extends MailWrapperTestBootstrap
      */
     public function setUp()
     {
-        if (!class_exists('Postmark\Inbound')) {
-            $this->markTestSkipped('Postmark\Inbound not installed');
+        if (!class_exists('BespokeSupport\PostmarkInbound\PostmarkInbound')) {
+            $this->markTestSkipped('BespokeSupport\PostmarkInbound\PostmarkInbound not installed');
         }
     }
 
@@ -73,6 +73,6 @@ class PostmarkTest extends MailWrapperTestBootstrap
     {
         $message = TesterWrappedMessage::getValid();
         $newMessage = MessageTransformer::convert($message, 'postmark');
-        $this->assertInstanceOf(Inbound::class, $newMessage);
+        $this->assertInstanceOf(PostmarkInbound::class, $newMessage);
     }
 }

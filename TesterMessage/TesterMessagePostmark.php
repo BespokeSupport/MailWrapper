@@ -11,7 +11,7 @@
 
 namespace BespokeSupport\MailWrapper\TesterMessage;
 
-use Postmark\Inbound;
+use BespokeSupport\PostmarkInbound\PostmarkInbound;
 
 /**
  * Class TesterMessagePostmark
@@ -103,7 +103,7 @@ class TesterMessagePostmark
 
 
     /**
-     * @return Inbound
+     * @return PostmarkInbound
      */
     public static function getNoValidBody()
     {
@@ -113,13 +113,13 @@ class TesterMessagePostmark
         unset($data->HtmlBody);
         $json = json_encode($data);
 
-        $message = new Inbound($json);
+        $message = new PostmarkInbound($json);
 
         return $message;
     }
 
     /**
-     * @return Inbound
+     * @return PostmarkInbound
      */
     public static function getNotValidNoCc()
     {
@@ -129,13 +129,13 @@ class TesterMessagePostmark
         unset($data->CcFull);
         $json = json_encode($data);
 
-        $message = new Inbound($json);
+        $message = new PostmarkInbound($json);
 
         return $message;
     }
 
     /**
-     * @return Inbound
+     * @return PostmarkInbound
      */
     public static function getNotValidNoFrom()
     {
@@ -146,13 +146,13 @@ class TesterMessagePostmark
         unset($data->FromFull);
         $json = json_encode($data);
 
-        $message = new Inbound($json);
+        $message = new PostmarkInbound($json);
 
         return $message;
     }
 
     /**
-     * @return Inbound
+     * @return PostmarkInbound
      */
     public static function getNotValidNoSubject()
     {
@@ -161,13 +161,13 @@ class TesterMessagePostmark
         unset($data->Subject);
         $json = json_encode($data);
 
-        $message = new Inbound($json);
+        $message = new PostmarkInbound($json);
 
         return $message;
     }
 
     /**
-     * @return Inbound
+     * @return PostmarkInbound
      */
     public static function getNotValidNoTo()
     {
@@ -177,19 +177,19 @@ class TesterMessagePostmark
         unset($data->ToFull);
         $json = json_encode($data);
 
-        $message = new Inbound($json);
+        $message = new PostmarkInbound($json);
 
         return $message;
     }
 
     /**
-     * @return Inbound
+     * @return PostmarkInbound
      */
     public static function getValid()
     {
         $json = self::$rawJson;
 
-        $message = new Inbound($json);
+        $message = new PostmarkInbound($json);
 
         return $message;
     }

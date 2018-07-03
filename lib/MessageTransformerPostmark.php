@@ -11,8 +11,7 @@
 
 namespace BespokeSupport\MailWrapper;
 
-use Postmark\Attachment;
-use Postmark\Inbound;
+use BespokeSupport\PostmarkInbound\PostmarkInbound;
 
 /**
  * Class MessageTransformerPostmark
@@ -38,7 +37,7 @@ class MessageTransformerPostmark implements MessageTransformerInterface
      */
     public static function toWrappedMessage($message)
     {
-        if (!($message instanceof Inbound)) {
+        if (!($message instanceof PostmarkInbound)) {
             throw new MailWrapperSetupException('Invalid Message');
         }
 
@@ -119,9 +118,7 @@ class MessageTransformerPostmark implements MessageTransformerInterface
         $now = new \DateTime();
         $data->Date = $now->format('r');
 
-        // TODO - attachments
-
-        $message = new Inbound(json_encode($data));
+        $message = new PostmarkInbound(json_encode($data));
 
         return $message;
     }
