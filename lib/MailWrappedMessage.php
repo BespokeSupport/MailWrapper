@@ -90,7 +90,6 @@ class MailWrappedMessage
     /**
      * MailWrappedMessage constructor.
      * @param $message MailWrappedMessage
-     * @throws MailWrapperSetupException
      */
     public function __construct($message = null)
     {
